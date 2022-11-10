@@ -1,10 +1,14 @@
 package _2;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
+
+import utils.IFileController;
+import utils.StreamFileController;
 
 public class Main {
 
@@ -21,16 +25,22 @@ public class Main {
 			if (!Files.exists(outputPath))
 				Files.createFile(outputPath);
 
-			FileOutputStream writer = new FileOutputStream(outputPath.toString());
+//			FileOutputStream writer = new FileOutputStream(outputPath.toString());
 
-			for (int i = 0; i < 100; i += 2) {
-				writer.write(String.valueOf(i).getBytes());
-				writer.write('\n');
-				System.out.print(i);
-			}
+			StreamFileController controller = new StreamFileController(outputPath);
 
-			writer.close();
-			input.close();
+			controller.setController(new IFileController() {
+				@Override
+				public void write(FileOutputStream writer) throws IOException {
+					for (int i = 0; i < 50; i += 3) {
+						writer.write(String.valueOf(i).getBytes());
+						writer.write('\n');
+						System.out.print(i);
+					}
+				}
+			});
+
+			controller.exec();
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
