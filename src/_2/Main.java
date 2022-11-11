@@ -7,7 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-import utils.IFileController;
+import utils.FileWriter;
+import utils.IFileWriter;
 import utils.StreamFileController;
 
 public class Main {
@@ -15,35 +16,32 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
 
-		try {
+		Path userHomePath = Paths.get(System.getProperty("user.dir"));
+		Path mainPath = userHomePath.resolve("src\\_2\\output");
 
-			Path userHomePath = Paths.get(System.getProperty("user.dir"));
-			Path mainPath = userHomePath.resolve("src\\_2\\output");
+		Path outputPath = mainPath.resolve("output.txt");
 
-			Path outputPath = mainPath.resolve("output.txt");
-
-			if (!Files.exists(outputPath))
+		if (!Files.exists(outputPath))
+			try {
 				Files.createFile(outputPath);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-//			FileOutputStream writer = new FileOutputStream(outputPath.toString());
-
-			StreamFileController controller = new StreamFileController(outputPath);
-
-			controller.setController(new IFileController() {
-				@Override
-				public void write(FileOutputStream writer) throws IOException {
-					for (int i = 0; i < 50; i += 3) {
-						writer.write(String.valueOf(i).getBytes());
-						writer.write('\n');
-						System.out.print(i);
+		StreamFileController<FileWriter> controller = new StreamFileController<FileWriter>(outputPath,
+				new IFileWriter() {
+					@Override
+					public void write(FileOutputStream writer) throws IOException {
+						for (int i = 0; i < 100; i += 3) {
+							writer.write(String.valueOf(i).getBytes());
+							writer.write('\n');
+							System.out.print(i);
+						}
 					}
-				}
-			});
+				});
 
-			controller.exec();
+		controller.exec();
 
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+		input.close();
 	}
 }
