@@ -1,4 +1,4 @@
-package _3;
+package _4;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -11,10 +11,11 @@ import java.util.Scanner;
 public class Main {
 
 	public static void main(String[] args) {
+
 		Scanner input = new Scanner(System.in);
 
 		Path projectPath = Paths.get(System.getProperty("user.dir"));
-		Path mainPath = projectPath.resolve("src\\_3");
+		Path mainPath = projectPath.resolve("src\\_4");
 
 		System.out.print("Fichero entrada: " + mainPath + "\\");
 		Path inputPath = mainPath.resolve(input.nextLine());
@@ -38,8 +39,8 @@ public class Main {
 				int character = reader.read();
 				if (character == -1)
 					break;
-				if (character == 32) {
-					continue;
+				if (character == (byte) 'a') {
+					character = (byte) 'X';
 				}
 				writer.write(character);
 				System.out.print((char) character);
@@ -55,4 +56,5 @@ public class Main {
 		input.close();
 
 	}
+
 }

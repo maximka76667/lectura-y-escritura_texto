@@ -1,8 +1,10 @@
-package _3;
+package _5;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,7 +16,7 @@ public class Main {
 		Scanner input = new Scanner(System.in);
 
 		Path projectPath = Paths.get(System.getProperty("user.dir"));
-		Path mainPath = projectPath.resolve("src\\_3");
+		Path mainPath = projectPath.resolve("src\\_5");
 
 		System.out.print("Fichero entrada: " + mainPath + "\\");
 		Path inputPath = mainPath.resolve(input.nextLine());
@@ -27,6 +29,9 @@ public class Main {
 			FileReader reader = new FileReader(inputPath.toString());
 			FileWriter writer = new FileWriter(outputPath.toString());
 
+			BufferedReader bufferedReader = new BufferedReader(reader);
+			PrintWriter printWriter = new PrintWriter(writer);
+
 			if (!Files.exists(outputPath))
 				try {
 					Files.createFile(outputPath);
@@ -34,15 +39,16 @@ public class Main {
 					e.printStackTrace();
 				}
 
+			int i = 1;
+
 			while (true) {
-				int character = reader.read();
-				if (character == -1)
+				String line = bufferedReader.readLine();
+				if (line == null)
 					break;
-				if (character == 32) {
-					continue;
-				}
-				writer.write(character);
-				System.out.print((char) character);
+				String newLine = i + " " + line;
+				printWriter.println(newLine);
+				System.out.println(newLine);
+				i++;
 			}
 
 			reader.close();
@@ -53,6 +59,6 @@ public class Main {
 		}
 
 		input.close();
-
 	}
+
 }

@@ -1,14 +1,10 @@
 package _1;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
-
-import utils.IFileReaderAndWriter;
-import utils.StreamFileController;
 
 public class Main {
 
@@ -16,25 +12,25 @@ public class Main {
 
 		Scanner input = new Scanner(System.in);
 
-		Path userHomePath = Paths.get(System.getProperty("user.dir"));
-		Path mainPath = userHomePath.resolve("src\\_1\\data");
+		Path projectPath = Paths.get(System.getProperty("user.dir"));
+		Path mainPath = projectPath.resolve("src\\_1");
 
-		StreamFileController<IFileReaderAndWriter> controller = new StreamFileController<IFileReaderAndWriter>(
-				mainPath.resolve("texto.txt"), mainPath.resolve("texto-resultado.txt"), new IFileReaderAndWriter() {
+		try {
 
-					@Override
-					public void write(FileInputStream reader, FileOutputStream writer) throws IOException {
-						while (true) {
-							int character = reader.read();
-							if (character == -1)
-								break;
-							writer.write(character);
-							System.out.print((char) character);
-						}
-					}
-				});
+			FileReader reader = new FileReader(mainPath.resolve(input.nextLine()).toString());
 
-		controller.exec();
+			while (true) {
+				int character = reader.read();
+				if (character == -1)
+					break;
+				System.out.print((char) character);
+			}
+
+			reader.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		input.close();
 
